@@ -8,12 +8,16 @@ import androidx.room.TypeConverters
 import com.example.cse_535_project_2_jet.components.DateConverters
 
 @Database(entities = [Settings::class, Histories::class], version = 1)
-@TypeConverters({DateConverters.class})
+@TypeConverters(DateConverters::class)
 abstract class GameDatabase : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
     abstract fun historyDao(): HistoryDao
 
+    // companion object: like static in Java (get memory while the program is loaded)
+    // The companion object enforces a singleton pattern, meaning there will only be one instance of the database created throughout the application lifecycle.
+    // This is particularly useful to avoid multiple instances of the database that can lead to data inconsistency and increased memory usage.
     companion object {
+        // ensures that any write to the INSTANCE variable is immediately visible to all threads.
         @Volatile
         private var INSTANCE: GameDatabase? = null
 
@@ -22,7 +26,7 @@ abstract class GameDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     GameDatabase::class.java,
-                    "health_database"
+                    "game_database"
                 ).build()
                 INSTANCE = instance
                 instance
