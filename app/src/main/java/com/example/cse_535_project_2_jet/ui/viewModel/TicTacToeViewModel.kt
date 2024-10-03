@@ -26,6 +26,7 @@ class TicTacToeViewModel : ViewModel() {
     fun makeMove(index: Int) {
         if (board[index].isEmpty() && winner == null) {
             board = board.toMutableList().apply { this[index] = currentPlayer }
+            // Connect to DB with winner, difficulty and Date time
             if (checkWin()) {
                 winner = currentPlayer
             } else if (board.all { it.isNotEmpty() }) {

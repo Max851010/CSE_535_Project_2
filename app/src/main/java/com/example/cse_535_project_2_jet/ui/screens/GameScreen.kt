@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -30,7 +29,7 @@ fun GameScreen(
     val winner = viewModel.winner
 
     // Select difficulty
-    var selectedDifficulty = viewModel.difficulty
+    val selectedDifficulty = viewModel.difficulty
     var expanded by remember { mutableStateOf(false) }
 
     Column(
