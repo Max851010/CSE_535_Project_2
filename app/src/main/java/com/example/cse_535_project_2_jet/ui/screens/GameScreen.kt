@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -33,11 +34,11 @@ fun GameScreen(
             Row {
                 for (j in 0..2) {
                     val index = i * 3 + j
-                    Button(
+                    OutlinedButton(
                         onClick = { viewModel.makeMove(index) },
+                        shape = RectangleShape,
                         modifier = Modifier
                             .size(100.dp)
-                            .padding(4.dp)
                     ) {
                         Text(text = board[index], style = MaterialTheme.typography.headlineLarge)
                     }
@@ -47,12 +48,14 @@ fun GameScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Show winner or reset button
+        // Show winner message if there is one
         if (winner != null) {
             Text(text = "Winner: $winner", style = MaterialTheme.typography.titleMedium)
-            Button(onClick = { viewModel.resetGame() }) {
-                Text("Reset Game")
-            }
+        }
+
+        // Always show reset button
+        Button(onClick = { viewModel.resetGame() }) {
+            Text("Reset Game")
         }
     }
 }
