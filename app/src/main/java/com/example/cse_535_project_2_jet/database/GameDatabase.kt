@@ -1,13 +1,16 @@
 package com.example.cse_535_project_2_jet.database
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.cse_535_project_2_jet.components.DateConverters
-
-@Database(entities = [Settings::class, Histories::class], version = 1)
+@Database(
+    entities = [Settings::class, Histories::class], version = 1,
+    exportSchema = true
+    )
 @TypeConverters(DateConverters::class)
 abstract class GameDatabase : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao

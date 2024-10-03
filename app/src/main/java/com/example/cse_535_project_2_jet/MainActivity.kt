@@ -12,7 +12,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var gameDatabase: GameDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        gameDatabase = GameDatabase.getDatabase(this)
         enableEdgeToEdge()
         setContent {
             CSE_535_Project_2_jetTheme {
