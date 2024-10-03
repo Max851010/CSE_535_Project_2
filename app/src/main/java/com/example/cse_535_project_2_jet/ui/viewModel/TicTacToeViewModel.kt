@@ -4,14 +4,25 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 
 class TicTacToeViewModel : ViewModel() {
-    var board by mutableStateOf(List(9) { "" }) // 3x3 board represented as a 1D list
+    var board by mutableStateOf(List(9) { "" })
         private set
     var currentPlayer by mutableStateOf("X")
         private set
     var winner by mutableStateOf<String?>(null)
         private set
 
-    // Function to handle a player's move
+    private var _difficulty = mutableStateOf("Easy")
+    var difficulty: String
+        get() = _difficulty.value
+        private set(value) {
+            _difficulty.value = value
+            // Update game logic based on difficulty if necessary
+        }
+
+    fun updateDifficulty(level: String) {
+        difficulty = level
+    }
+
     fun makeMove(index: Int) {
         if (board[index].isEmpty() && winner == null) {
             board = board.toMutableList().apply { this[index] = currentPlayer }
@@ -25,7 +36,6 @@ class TicTacToeViewModel : ViewModel() {
         }
     }
 
-    // Check if there's a winning combination
     private fun checkWin(): Boolean {
         val winPatterns = listOf(
             listOf(0, 1, 2), listOf(3, 4, 5), listOf(6, 7, 8), // rows
@@ -37,7 +47,6 @@ class TicTacToeViewModel : ViewModel() {
         }
     }
 
-    // Function to reset the game
     fun resetGame() {
         board = List(9) { "" }
         currentPlayer = "X"
