@@ -17,7 +17,7 @@ data class Settings (
 @Parcelize
 data class Histories (
     @PrimaryKey(autoGenerate = true) val historyID: Int,
-    val palyer_name: String,
+    val player_name: String,
     val level: Char, // 0: Easy, 1: Medium, 2: Hard
     val date: LocalDateTime = LocalDateTime.now(),
 ) : Parcelable {
