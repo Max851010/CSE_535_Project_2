@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cse_535_project_2_jet.ui.screens.GameScreen
 import com.example.cse_535_project_2_jet.ui.screens.PastGameScreen
 import com.example.cse_535_project_2_jet.ui.screens.SettingsScreen
+//import com.example.cse_535_project_2_jet.viewModel.settingViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
