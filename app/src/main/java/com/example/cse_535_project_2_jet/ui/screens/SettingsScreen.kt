@@ -10,9 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.navigation.NavHostController
+import com.example.cse_535_project_2_jet.database.GameDatabase
 
 @Composable
 fun SettingsScreen(navController: NavHostController) {
+    lateinit var gameDatabase: GameDatabase
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

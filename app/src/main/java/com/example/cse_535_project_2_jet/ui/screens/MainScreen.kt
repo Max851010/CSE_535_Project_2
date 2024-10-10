@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.cse_535_project_2_jet.navigation.AppNavHost
-import com.google.androidgamesdk.gametextinput.Settings
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,6 +21,7 @@ import com.google.androidgamesdk.gametextinput.Settings
 fun MainScreen() {
     val navController = rememberNavController()
     val selectedIndex = remember { mutableStateOf(0) }
+
 
     Scaffold(
         bottomBar = {

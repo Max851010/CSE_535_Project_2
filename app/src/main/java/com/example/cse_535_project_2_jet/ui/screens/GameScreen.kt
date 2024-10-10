@@ -2,6 +2,7 @@ package com.example.cse_535_project_2_jet.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
@@ -12,11 +13,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import com.example.cse_535_project_2_jet.database.GameDatabase
+
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.cse_535_project_2_jet.ui.viewModel.TicTacToeViewModel
 
 @Composable
@@ -24,6 +27,7 @@ fun GameScreen(
     navController: NavHostController,
     viewModel: TicTacToeViewModel = viewModel() // Default ViewModel provider
 )  {
+    lateinit var gameDatabase: GameDatabase
     val board = viewModel.board
     val currentPlayer = viewModel.currentPlayer
     val winner = viewModel.winner
