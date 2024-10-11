@@ -22,15 +22,15 @@ import com.example.cse_535_project_2_jet.ui.viewModel.TicTacToeViewModel
 @Composable
 fun GameScreen(
     navController: NavHostController,
-    viewModel: TicTacToeViewModel = viewModel() // Default ViewModel provider
-)  {
+    viewModel: TicTacToeViewModel = viewModel()
+) {
     val board = viewModel.board
     val currentPlayer = viewModel.currentPlayer
     val winner = viewModel.winner
+    val selectedMode = viewModel.gameMode
 
-    // Select difficulty
-    val selectedDifficulty = viewModel.difficulty
-    var expanded by remember { mutableStateOf(false) }
+    // Select game mode
+    var expandedMode by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -41,49 +41,51 @@ fun GameScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Game Mode Selector (PvP or PvAI)
         Box {
             TextField(
-                value = selectedDifficulty,
+                value = selectedMode,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text("Select Difficulty") },
+                label = { Text("Select Game Mode") },
                 trailingIcon = {
                     Icon(
                         Icons.Filled.ArrowDropDown,
                         "Trailing icon for exposed dropdown menu",
-                        Modifier.clickable { expanded = !expanded } // Toggle expanded state here
+                        Modifier.clickable { expandedMode = !expandedMode }
                     )
                 },
                 modifier = Modifier.fillMaxWidth(0.7f)
             )
 
             DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
+                expanded = expandedMode,
+                onDismissRequest = { expandedMode = false },
                 modifier = Modifier.width((LocalConfiguration.current.screenWidthDp * 0.7f).dp)
             ) {
                 DropdownMenuItem(
-                    text = { Text("Easy") },
+                    text = { Text("Player vs Player") },
                     onClick = {
-                        viewModel.updateDifficulty("Easy")
-                        expanded = false
+                        viewModel.updateGameMode("PvP")
+                        expandedMode = false
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text("Medium") },
+                    text = { Text("Player vs AI") },
                     onClick = {
-                        viewModel.updateDifficulty("Medium")
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Hard") },
-                    onClick = {
-                        viewModel.updateDifficulty("Hard")
-                        expanded = false
+                        viewModel.updateGameMode("PvAI")
+                        expandedMode = false
                     }
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Difficulty selector appears only if "PvAI" is selected
+        if (selectedMode == "PvAI") {
+            // Difficulty selector code remains the same as before
+            DifficultySelector(viewModel)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -117,3 +119,55 @@ fun GameScreen(
         }
     }
 }
+
+@Composable
+fun DifficultySelector(viewModel: TicTacToeViewModel) {
+    val selectedDifficulty = viewModel.difficulty
+    var expandedDifficulty by remember { mutableStateOf(false) }
+
+    Box {
+        TextField(
+            value = selectedDifficulty,
+            onValueChange = { },
+            readOnly = true,
+            label = { Text("Select Difficulty") },
+            trailingIcon = {
+                Icon(
+                    Icons.Filled.ArrowDropDown,
+                    "Trailing icon for exposed dropdown menu",
+                    Modifier.clickable { expandedDifficulty = !expandedDifficulty }
+                )
+            },
+            modifier = Modifier.fillMaxWidth(0.7f)
+        )
+
+        DropdownMenu(
+            expanded = expandedDifficulty,
+            onDismissRequest = { expandedDifficulty = false },
+            modifier = Modifier.width((LocalConfiguration.current.screenWidthDp * 0.7f).dp)
+        ) {
+            DropdownMenuItem(
+                text = { Text("Easy") },
+                onClick = {
+                    viewModel.updateDifficulty("Easy")
+                    expandedDifficulty = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Medium") },
+                onClick = {
+                    viewModel.updateDifficulty("Medium")
+                    expandedDifficulty = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Hard") },
+                onClick = {
+                    viewModel.updateDifficulty("Hard")
+                    expandedDifficulty = false
+                }
+            )
+        }
+    }
+}
+
