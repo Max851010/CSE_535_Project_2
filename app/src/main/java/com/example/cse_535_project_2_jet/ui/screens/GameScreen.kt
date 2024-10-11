@@ -19,14 +19,31 @@ import com.example.cse_535_project_2_jet.database.GameDatabase
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cse_535_project_2_jet.ui.viewModel.TicTacToeViewModel
+import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
+
+class TicTacToeViewModelFactory(
+    private val databaseViewModel: DataBaseViewModel
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TicTacToeViewModel::class.java)) {
+            return TicTacToeViewModel(databaseViewModel) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
 
 @Composable
 fun GameScreen(
     navController: NavHostController,
-    viewModel: TicTacToeViewModel = viewModel() // Default ViewModel provider
+    databaseViewModel: DataBaseViewModel = viewModel()// Default ViewModel provider
 )  {
+    val viewModel: TicTacToeViewModel = viewModel(
+        factory = TicTacToeViewModelFactory(databaseViewModel)
+    )
     lateinit var gameDatabase: GameDatabase
     val board = viewModel.board
     val currentPlayer = viewModel.currentPlayer
