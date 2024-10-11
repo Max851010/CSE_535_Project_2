@@ -13,6 +13,8 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
         private set
     var currentPlayer by mutableStateOf("X")
         private set
+    var currentDifficulty by mutableStateOf("Easy")
+        private set
     var winner by mutableStateOf<String?>(null)
         private set
 
@@ -24,9 +26,24 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
             // Update game logic based on difficulty if necessary
         }
 
+    private var _playerType = mutableStateOf("Single Player")
+    var playerType: String
+        get() = _playerType.value
+        private set(value) {
+            _playerType.value = value
+            // You can add logic here if needed based on player type
+        }
+
+    fun updatePlayerType(type: String) {
+        playerType = type
+    }
+
+
     fun updateDifficulty(level: String) {
         difficulty = level
+        currentDifficulty = level
     }
+
 
     fun makeMove(index: Int) {
         if (board[index].isEmpty() && winner == null) {

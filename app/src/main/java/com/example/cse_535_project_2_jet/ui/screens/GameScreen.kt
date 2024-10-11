@@ -60,52 +60,6 @@ fun GameScreen(
     ) {
         Text(text = "Current Player: $currentPlayer")
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box {
-            TextField(
-                value = selectedDifficulty,
-                onValueChange = { },
-                readOnly = true,
-                label = { Text("Select Difficulty") },
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.ArrowDropDown,
-                        "Trailing icon for exposed dropdown menu",
-                        Modifier.clickable { expanded = !expanded } // Toggle expanded state here
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(0.7f)
-            )
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.width((LocalConfiguration.current.screenWidthDp * 0.7f).dp)
-            ) {
-                DropdownMenuItem(
-                    text = { Text("Easy") },
-                    onClick = {
-                        viewModel.updateDifficulty("Easy")
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Medium") },
-                    onClick = {
-                        viewModel.updateDifficulty("Medium")
-                        expanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Hard") },
-                    onClick = {
-                        viewModel.updateDifficulty("Hard")
-                        expanded = false
-                    }
-                )
-            }
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
