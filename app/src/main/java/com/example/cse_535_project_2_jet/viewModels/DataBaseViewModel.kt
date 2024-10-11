@@ -8,9 +8,9 @@ import com.example.cse_535_project_2_jet.database.Histories
 import com.example.cse_535_project_2_jet.database.Settings
 import kotlinx.coroutines.launch
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+class DataBaseViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var gameDatabase: GameDatabase
-    fun getGatabase() {
+    fun getDatabase() {
         viewModelScope.launch {
             gameDatabase = GameDatabase.getDatabase(getApplication())
 

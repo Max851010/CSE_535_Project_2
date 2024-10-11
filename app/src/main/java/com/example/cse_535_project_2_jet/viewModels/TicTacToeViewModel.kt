@@ -1,9 +1,14 @@
 package com.example.cse_535_project_2_jet.ui.viewModel
 
 import androidx.compose.runtime.*
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cse_535_project_2_jet.database.Histories
+import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
 
-class TicTacToeViewModel : ViewModel() {
+class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel() {
+//class TicTacToeViewModel : ViewModel() {
     var board by mutableStateOf(List(9) { "" })
         private set
     var currentPlayer by mutableStateOf("X")
@@ -34,6 +39,14 @@ class TicTacToeViewModel : ViewModel() {
             } else {
                 currentPlayer = if (currentPlayer == "X") "O" else "X"
             }
+        }
+        val tmp_level: Char = '1'
+        if (winner != null) {
+            val new_history = Histories(
+                winner = winner!!,
+                level = tmp_level
+            )
+            dataBaseViewModel.insertHistory(new_history)
         }
     }
 
