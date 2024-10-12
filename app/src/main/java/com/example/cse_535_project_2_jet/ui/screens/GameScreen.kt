@@ -65,7 +65,7 @@ fun GameScreen(
 
         // Always show reset button
         Button(onClick = { viewModel.resetGame() }) {
-            Text("Reset Game")
+            Text("Update Change")
         }
     }
 }
