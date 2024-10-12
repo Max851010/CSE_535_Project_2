@@ -13,7 +13,6 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
     fun getDatabase() {
         viewModelScope.launch {
             gameDatabase = GameDatabase.getDatabase(getApplication())
-
         }
     }
     var setting: Settings? = null
@@ -22,8 +21,8 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
     var histories: List<Histories> = emptyList()
         private set
 
-    fun insertOrUpdateSetting(level: Char) {
-        val newSetting = Settings(settingsID = 1, level = level)
+    fun insertOrUpdateSetting(level: Char, type: Char) {
+        val newSetting = Settings(settingsID = 1, level = level, type = type)
         viewModelScope.launch {
             gameDatabase.settingsDao().upsert(newSetting)
         }

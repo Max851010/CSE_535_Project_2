@@ -24,7 +24,7 @@ fun AppNavHost(navController: NavHostController) {
             PastGameScreen(navController)
         }
         composable("settings") {
-            SettingsScreen(navController)
+            SettingsScreen(navController, databaseViewModel)
         }
     }
 }

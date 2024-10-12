@@ -28,6 +28,7 @@ fun MainScreen() {
     val context = LocalContext.current
     val databaseViewModel: DataBaseViewModel = viewModel()
     databaseViewModel.getDatabase()
+    databaseViewModel.loadSettings()
 
 
     Scaffold(
