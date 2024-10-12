@@ -1,16 +1,17 @@
 package com.example.cse_535_project_2_jet.ui.screens
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,16 +24,37 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.cse_535_project_2_jet.database.GameDatabase
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cse_535_project_2_jet.ui.components.TicTacToeViewModelFactory
 import com.example.cse_535_project_2_jet.ui.viewModel.TicTacToeViewModel
+import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
 
 
 @Composable
-fun SettingsScreen(navController: NavHostController,
-                   viewModel: TicTacToeViewModel = viewModel()) {
-    lateinit var gameDatabase: GameDatabase
+fun SettingsScreen(
+    navController: NavHostController,
+    databaseViewModel: DataBaseViewModel = viewModel()// Default ViewModel provider
+)  {
+    val viewModel: TicTacToeViewModel = viewModel(
+        factory = TicTacToeViewModelFactory(databaseViewModel)
+    )
+    val playerTypeMap = mapOf(
+        '0' to "Vs Player",
+        '1' to "Vs Computer",
+    )
+    LaunchedEffect(Unit) {
+        val settings_obj = databaseViewModel.setting
+        if (settings_obj != null) {
+            viewModel.updateDifficulty(settings_obj.level)
+            playerTypeMap[settings_obj.type]?.let { viewModel.updatePlayerType(it) }
+        } else {
+            viewModel.updateDifficulty('0')
+            viewModel.updatePlayerType("Vs Player")
 
-    val currentDifficulty = viewModel.currentDifficulty
-    val selectedDifficulty = viewModel.difficulty
+        }
+    }
+
+    //val currentDifficulty = viewModel.currentDifficulty
+    //val selectedDifficulty = viewModel.difficulty
     var expandedDifficulty by remember { mutableStateOf(false) }
     var expandedPlayerType by remember { mutableStateOf(false) }
 
@@ -42,10 +64,10 @@ fun SettingsScreen(navController: NavHostController,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(text = "Current Difficulty: $currentDifficulty")
+        Text(text = "Current Difficulty: ${viewModel.currentDifficulty}")
         Box {
             TextField(
-                value = selectedDifficulty,
+                value = viewModel.currentDifficulty,
                 onValueChange = { },
                 readOnly = true,
                 label = { Text("Select Difficulty") },
@@ -67,21 +89,21 @@ fun SettingsScreen(navController: NavHostController,
                 DropdownMenuItem(
                     text = { Text("Easy") },
                     onClick = {
-                        viewModel.updateDifficulty("Easy")
+                        viewModel.updateDifficulty('0')
                         expandedDifficulty  = false
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("Medium") },
                     onClick = {
-                        viewModel.updateDifficulty("Medium")
+                        viewModel.updateDifficulty('1')
                         expandedDifficulty  = false
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("Hard") },
                     onClick = {
-                        viewModel.updateDifficulty("Hard")
+                        viewModel.updateDifficulty('2')
                         expandedDifficulty  = false
                     }
                 )
@@ -128,8 +150,12 @@ fun SettingsScreen(navController: NavHostController,
                 )
             }
         }
-
-
-
+        Button(onClick = {
+            databaseViewModel.insertOrUpdateSetting(level = viewModel.difficultyChar, type = viewModel.playerTypeChar)
+            databaseViewModel.loadSettings()
+            //Log.d("SettingsScreen", "Difficulty Level: ${viewModel.playerTypeChar}") // Log the reset action
+        }) {
+            Text("Reset Game")
+        }
     }
 }

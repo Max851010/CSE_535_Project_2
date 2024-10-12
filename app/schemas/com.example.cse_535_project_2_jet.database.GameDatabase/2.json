@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "72f567dbdb53fd9c983041f2340ef14b",
+    "identityHash": "5206a74c85b91deeb255c4116e5eadf0",
     "entities": [
       {
         "tableName": "settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`settingsID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `level` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`settingsID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `level` INTEGER NOT NULL, `type` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "settingsID",
@@ -17,6 +17,12 @@
           {
             "fieldPath": "level",
             "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -32,7 +38,7 @@
       },
       {
         "tableName": "histories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`historyID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `palyer_name` TEXT NOT NULL, `level` INTEGER NOT NULL, `date` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`historyID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `winner` TEXT NOT NULL, `level` INTEGER NOT NULL, `date` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "historyID",
@@ -41,8 +47,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "palyer_name",
-            "columnName": "palyer_name",
+            "fieldPath": "winner",
+            "columnName": "winner",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -72,7 +78,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '72f567dbdb53fd9c983041f2340ef14b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5206a74c85b91deeb255c4116e5eadf0')"
     ]
   }
 }

@@ -1,14 +1,11 @@
 package com.example.cse_535_project_2_jet.ui.viewModel
 
 import androidx.compose.runtime.*
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cse_535_project_2_jet.database.Histories
 import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
 
 class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel() {
-//class TicTacToeViewModel : ViewModel() {
     var board by mutableStateOf(List(9) { "" })
         private set
     var currentPlayer by mutableStateOf("X")
@@ -18,12 +15,17 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
     var winner by mutableStateOf<String?>(null)
         private set
 
-    private var _difficulty = mutableStateOf("Easy")
-    var difficulty: String
-        get() = _difficulty.value
+    private var _difficultyChar = mutableStateOf('0') // Store difficulty as a char
+    var difficultyChar: Char
+        get() = _difficultyChar.value
         private set(value) {
-            _difficulty.value = value
-            // Update game logic based on difficulty if necessary
+            _difficultyChar.value = value
+            currentDifficulty = when (value) {
+                '0' -> "Easy"
+                '1' -> "Medium"
+                '2' -> "Hard"
+                else -> "Easy" // Default value
+            }
         }
 
     private var _playerType = mutableStateOf("Single Player")
@@ -34,14 +36,25 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
             // You can add logic here if needed based on player type
         }
 
+    private var _playerTypeChar = mutableStateOf('0') // '0' for "Vs Player"
+    var playerTypeChar: Char
+        get() = _playerTypeChar.value
+        private set(value) {
+            _playerTypeChar.value = value
+        }
+
     fun updatePlayerType(type: String) {
         playerType = type
+        playerTypeChar = when (type) {
+            "Vs Player" -> '0'
+            "Vs Computer" -> '1'
+            else -> '0' // Default value
+        }
     }
 
 
-    fun updateDifficulty(level: String) {
-        difficulty = level
-        currentDifficulty = level
+    fun updateDifficulty(level: Char) {
+        difficultyChar = level
     }
 
 

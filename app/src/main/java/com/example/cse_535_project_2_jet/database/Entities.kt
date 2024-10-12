@@ -10,7 +10,8 @@ import java.time.format.DateTimeFormatter
 @Entity(tableName = "settings")
 data class Settings (
     @PrimaryKey(autoGenerate = true) val settingsID: Int,
-    val level: Char // 0: Easy, 1: Medium, 2: Hard
+    val level: Char, // 0: Easy, 1: Medium, 2: Hard
+    val type: Char // 0: local pvp, 1: pvc, 2: blue tooth pvp
 )
 
 @Entity(tableName = "histories")
