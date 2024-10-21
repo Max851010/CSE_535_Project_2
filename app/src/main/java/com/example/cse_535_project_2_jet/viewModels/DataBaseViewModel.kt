@@ -1,24 +1,25 @@
 package com.example.cse_535_project_2_jet.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cse_535_project_2_jet.database.GameDatabase
 import com.example.cse_535_project_2_jet.database.Histories
 import com.example.cse_535_project_2_jet.database.Settings
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 class DataBaseViewModel(application: Application) : AndroidViewModel(application) {
-    private lateinit var gameDatabase: GameDatabase
-    fun getDatabase() {
-        viewModelScope.launch {
-            gameDatabase = GameDatabase.getDatabase(getApplication())
-        }
+    private val gameDatabase: GameDatabase by lazy {
+        GameDatabase.getDatabase(application)
     }
     var setting: Settings? = null
         private set
 
-    var histories: List<Histories> = emptyList()
+    var histories: Flow<List<Histories>> = flowOf(emptyList())
         private set
 
     fun insertOrUpdateSetting(level: Char, type: Char) {
@@ -43,6 +44,7 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
     fun loadHistories() {
         viewModelScope.launch {
             histories = gameDatabase.historyDao().getHistories()
+            Log.d("DataBaseViewModel", "Histories Loaded")
         }
     }
 }

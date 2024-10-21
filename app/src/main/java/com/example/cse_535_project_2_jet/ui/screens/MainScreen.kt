@@ -27,7 +27,6 @@ fun MainScreen() {
     val selectedIndex = remember { mutableStateOf(0) }
     val context = LocalContext.current
     val databaseViewModel: DataBaseViewModel = viewModel()
-    databaseViewModel.getDatabase()
     databaseViewModel.loadSettings()
 
 

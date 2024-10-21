@@ -1,5 +1,6 @@
 package com.example.cse_535_project_2_jet.ui.viewModel
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.example.cse_535_project_2_jet.database.Histories
@@ -72,6 +73,10 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
         }
         val tmp_level: Char = '1'
         if (winner != null) {
+            if (winner != "Draw") {
+                winner = if (winner == "O") "Player 1" else "Player 2"
+            }
+            Log.d("db", "${winner}")
             val new_history = Histories(
                 winner = winner!!,
                 level = tmp_level

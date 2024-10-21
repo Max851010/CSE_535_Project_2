@@ -25,7 +25,6 @@ fun GameScreen(
     val viewModel: TicTacToeViewModel = viewModel(
         factory = TicTacToeViewModelFactory(databaseViewModel)
     )
-    lateinit var gameDatabase: GameDatabase
     val board = viewModel.board
     val currentPlayer = viewModel.currentPlayer
     val winner = viewModel.winner
@@ -35,7 +34,7 @@ fun GameScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Current Player: $currentPlayer")
+        Text(text = "Current Player:  ${if (currentPlayer == "O") "Player 1"  else  "Player 2"}")
 
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -60,12 +59,16 @@ fun GameScreen(
 
         // Show winner message if there is one
         if (winner != null) {
-            Text(text = "Winner: $winner", style = MaterialTheme.typography.titleMedium)
+            if (winner == "Draw") {
+                Text(text = "Draw Game", style = MaterialTheme.typography.titleMedium)
+            } else {
+                Text(text = "Winner: $winner", style = MaterialTheme.typography.titleMedium)
+            }
         }
 
         // Always show reset button
         Button(onClick = { viewModel.resetGame() }) {
-            Text("Update Change")
+            Text("Reset")
         }
     }
 }
