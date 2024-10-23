@@ -8,19 +8,25 @@ import com.example.cse_535_project_2_jet.database.GameDatabase
 import com.example.cse_535_project_2_jet.database.Histories
 import com.example.cse_535_project_2_jet.database.Settings
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 class DataBaseViewModel(application: Application) : AndroidViewModel(application) {
     private val gameDatabase: GameDatabase by lazy {
         GameDatabase.getDatabase(application)
     }
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> get() = _isLoading
+
     var setting: Settings? = null
         private set
 
     var histories: Flow<List<Histories>> = flowOf(emptyList())
         private set
+
 
     fun insertOrUpdateSetting(level: Char, type: Char) {
         val newSetting = Settings(settingsID = 1, level = level, type = type)
@@ -31,18 +37,29 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
 
     fun loadSettings() {
         viewModelScope.launch {
-            setting = gameDatabase.settingsDao().getSettingById(1)
-            Log.d("DataBaseViewModel", "Loading settings")
-            if (setting == null) {
-                Log.d("DataBaseViewModel", "Initialize the first setting record")
-                insertOrUpdateSetting('0', '1')
+            // Indicate that loading is in progress
+            _isLoading.value = true
+            try {
+                setting = gameDatabase.settingsDao().getSettingById(1)
+                Log.d("DataBaseViewModel", "Loading settings")
+
+                if (setting == null) {
+                    Log.d("DataBaseViewModel", "Initialize the first setting record")
+                    insertOrUpdateSetting('0', '1')
+                    setting = gameDatabase.settingsDao().getSettingById(1)
+                    Log.d("DataBaseViewModel", "Loading settings after initialization")
+                }
+            } finally {
+                // Once loading is done, update the loading state
+                if (setting != null) {
+                    _isLoading.value = false
+                }
             }
         }
     }
 
     fun insertHistory(history: Histories) {
         viewModelScope.launch {
-            Log.d("DataBaseViewModel", history.toString())
             gameDatabase.historyDao().insertRecord(history)
             Log.d("DataBaseViewModel", "History inserted")
         }
