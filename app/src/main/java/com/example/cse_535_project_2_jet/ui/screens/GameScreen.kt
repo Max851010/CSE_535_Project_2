@@ -1,9 +1,11 @@
 package com.example.cse_535_project_2_jet.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -22,6 +24,9 @@ fun GameScreen(
     navController: NavHostController,
     databaseViewModel: DataBaseViewModel = viewModel()// Default ViewModel provider
 )  {
+    LaunchedEffect(Unit) {
+        databaseViewModel.loadSettings()
+    }
     val viewModel: TicTacToeViewModel = viewModel(
         factory = TicTacToeViewModelFactory(databaseViewModel)
     )
@@ -34,7 +39,15 @@ fun GameScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Current Player:  ${if (currentPlayer == "O") "Player 1"  else  "Player 2"}")
+        Text(
+            text = "Current Player: ${
+                if (currentPlayer == "X") {
+                    "Player 1"  // You are always Player 1
+                } else {
+                    if (databaseViewModel.setting?.type == '1') "AI" else "Player 2"  // AI or Player 2
+                }
+            }"
+        )
 
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +75,12 @@ fun GameScreen(
             if (winner == "Draw") {
                 Text(text = "Draw Game", style = MaterialTheme.typography.titleMedium)
             } else {
-                Text(text = "Winner: $winner", style = MaterialTheme.typography.titleMedium)
+                val winnerText = if (databaseViewModel.setting?.type == '1' && winner == "Player 1") {
+                    "Winner: AI"
+                } else {
+                    "Winner: $winner"
+                }
+                Text(text = winnerText, style = MaterialTheme.typography.titleMedium)
             }
         }
 
