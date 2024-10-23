@@ -128,7 +128,7 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
     // AI move logic based on difficulty
     private fun aiMove() {
         viewModelScope.launch {
-            delay(800) // Add a 500ms delay before the AI makes its move
+            delay(800) // Add a 800ms delay before the AI makes its move
             val bestMove = when (dataBaseViewModel.setting?.level) {
                 '0' -> getRandomMove() // Easy
                 '1' -> if (Math.random() > 0.5) getRandomMove() else minimaxMove() // Medium
