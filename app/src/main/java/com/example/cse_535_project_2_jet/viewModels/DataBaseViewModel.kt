@@ -35,7 +35,7 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
             Log.d("DataBaseViewModel", "Loading settings")
             if (setting == null) {
                 Log.d("DataBaseViewModel", "Initialize the first setting record")
-                insertOrUpdateSetting('0', '0')
+                insertOrUpdateSetting('0', '1')
             }
         }
     }
