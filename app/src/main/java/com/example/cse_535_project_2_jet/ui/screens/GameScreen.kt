@@ -22,11 +22,12 @@ import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
 @Composable
 fun GameScreen(
     navController: NavHostController,
-    databaseViewModel: DataBaseViewModel = viewModel()// Default ViewModel provider
+    databaseViewModel: DataBaseViewModel = viewModel() // Default ViewModel provider
 )  {
     LaunchedEffect(Unit) {
         databaseViewModel.loadSettings()
     }
+
     val viewModel: TicTacToeViewModel = viewModel(
         factory = TicTacToeViewModelFactory(databaseViewModel)
     )
@@ -39,12 +40,16 @@ fun GameScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Log.d("first time", "${databaseViewModel.setting?.type}")
+
+        // Determine the game type (Vs Player or Vs AI)
+        val isVsAI = databaseViewModel.setting?.type == '1'
+
         Text(
             text = "Current Player: ${
-                if (databaseViewModel.setting?.type == '1') {
-                    // Playing against AI
+                if (isVsAI) {
                     if (currentPlayer == "X") {
-                        "Player"  // Human
+                        "Player"  // Human's turn
                     } else {
                         "AI"  // AI's turn
                     }
@@ -59,7 +64,6 @@ fun GameScreen(
             }"
         )
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
         // 3x3 Grid for the Tic-Tac-Toe board
@@ -67,8 +71,17 @@ fun GameScreen(
             Row {
                 for (j in 0..2) {
                     val index = i * 3 + j
+
+                    // Disable buttons if it's AI's turn
+                    val isButtonEnabled = !isVsAI || currentPlayer == "X"
+
                     OutlinedButton(
-                        onClick = { viewModel.makeMove(index) },
+                        onClick = {
+                            if (isButtonEnabled) {
+                                viewModel.makeMove(index)
+                            }
+                        },
+                        enabled = isButtonEnabled,
                         shape = RectangleShape,
                         modifier = Modifier.size(100.dp)
                     ) {
@@ -85,7 +98,7 @@ fun GameScreen(
             if (winner == "Draw") {
                 Text(text = "Draw Game", style = MaterialTheme.typography.titleMedium)
             } else {
-                val winnerText = if (databaseViewModel.setting?.type == '1' && winner == "Player 1") {
+                val winnerText = if (isVsAI && winner == "Player 1") {
                     "Winner: AI"
                 } else {
                     "Winner: $winner"
@@ -100,3 +113,4 @@ fun GameScreen(
         }
     }
 }
+
