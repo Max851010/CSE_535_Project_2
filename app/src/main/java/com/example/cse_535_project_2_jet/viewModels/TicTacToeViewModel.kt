@@ -96,6 +96,7 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
         if (winner != null) {
             // Determine if it's a player vs AI game and the AI won
             val isVsAI = dataBaseViewModel.setting?.type == '1'
+            val new_level = dataBaseViewModel.setting?.level
             val aiWins = isVsAI && winner == "O"
             val humanWins = isVsAI && winner == "X"
 
@@ -111,15 +112,16 @@ class TicTacToeViewModel(val dataBaseViewModel: DataBaseViewModel) : ViewModel()
             }
 
             Log.d("db", "$winner")
-            Log.d("View Model", "Difficulty Level: $difficultyChar")
-            Log.d("View Model", "Player Type: $playerTypeChar")
-
             // Insert result into database
-            val newHistory = Histories(
-                winner = winner!!,
-                level = difficultyChar
-            )
-            dataBaseViewModel.insertHistory(newHistory)
+            val newHistory = new_level?.let {
+                Histories(
+                    winner = winner!!,
+                    level = it
+                )
+            }
+            if (newHistory != null) {
+                dataBaseViewModel.insertHistory(newHistory)
+            }
         }
     }
 
