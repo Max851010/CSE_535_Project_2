@@ -41,8 +41,9 @@ fun PastGameScreen(
 
     LaunchedEffect(histories) {
         Log.d("PastGameScreen", "Histories Size: ${histories.size}")
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        dates = histories.map { it.date.format(formatter) }
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        dates = histories.map { it.date.format(dateFormatter) + "  " + it.date.format(timeFormatter)}
         winners = histories.map { it.winner }
         difficultyModes = histories.map {
             when (it.level) {
@@ -88,7 +89,7 @@ fun HeaderRow() {
             .background(Color(0xFFB0C4DE)),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        HeaderCell("Date")
+        DateHeaderCell("Time")
         HeaderCell("Winner")
         HeaderCell("Difficulty")
     }
@@ -103,18 +104,30 @@ fun DataRow(date: String, winner: String, difficulty: String) {
             .border(1.dp, Color.Black),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        DataCell(date)
+        DateDataCell(date)
         DataCell(winner)
         DataCell(difficulty)
     }
 }
-
+@Composable
+fun DateDataCell(text: String) {
+    Box(
+        modifier = Modifier
+            .padding(2.dp)
+            .size(180.dp, 50.dp)
+        ,// Keep the same size for consistency
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text=text)
+    }
+}
 @Composable
 fun DataCell(text: String) {
     Box(
         modifier = Modifier
-            .padding(8.dp)
-            .size(100.dp, 50.dp),
+            .padding(2.dp)
+            .size(80.dp, 50.dp)
+           ,// Keep the same size for consistency
         contentAlignment = Alignment.Center
     ) {
         Text(text = text)
@@ -122,11 +135,24 @@ fun DataCell(text: String) {
 }
 
 @Composable
+fun DateHeaderCell(text: String) {
+    Box(
+        modifier = Modifier
+            .padding(2.dp)
+            .size(180.dp, 50.dp)
+        ,// Keep the same size for consistency
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text=text, fontWeight = FontWeight.Bold)
+    }
+}
+@Composable
 fun HeaderCell(text: String) {
     Box(
         modifier = Modifier
-            .padding(8.dp)
-            .size(100.dp, 50.dp),
+            .padding(2.dp)
+            .size(80.dp, 50.dp)
+        ,// Keep the same size for consistency
         contentAlignment = Alignment.Center
     ) {
         Text(text = text, fontWeight = FontWeight.Bold)
