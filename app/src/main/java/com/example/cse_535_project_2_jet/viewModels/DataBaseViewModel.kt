@@ -51,6 +51,7 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
                 }
             } finally {
                 // Once loading is done, update the loading state
+                Log.d("databaseViewModel", "isLoading: ${_isLoading.value}")
                 if (setting != null) {
                     _isLoading.value = false
                 }
