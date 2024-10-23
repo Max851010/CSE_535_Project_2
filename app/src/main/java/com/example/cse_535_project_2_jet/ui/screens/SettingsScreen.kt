@@ -42,6 +42,7 @@ fun SettingsScreen(
         '1' to "Vs Computer",
     )
     LaunchedEffect(Unit) {
+        databaseViewModel.loadSettings()
         val settings_obj = databaseViewModel.setting
         if (settings_obj != null) {
             viewModel.updateDifficulty(settings_obj.level)
@@ -65,6 +66,8 @@ fun SettingsScreen(
     ) {
 
         Text(text = "Current Difficulty: ${viewModel.currentDifficulty}")
+        Spacer(modifier = Modifier.height(5.dp))
+
         Box {
             TextField(
                 value = viewModel.currentDifficulty,
@@ -110,9 +113,11 @@ fun SettingsScreen(
             }
         }
 
-
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(text = "Current Player Type: ${viewModel.playerType}")
+        Spacer(modifier = Modifier.height(5.dp))
+
         Box {
             TextField(
                 value = viewModel.playerType,
@@ -150,13 +155,16 @@ fun SettingsScreen(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(onClick = {
             databaseViewModel.insertOrUpdateSetting(level = viewModel.difficultyChar, type = viewModel.playerTypeChar)
             databaseViewModel.loadSettings()
             Log.d("SettingsScreen", "Difficulty Level: ${viewModel.difficultyChar}") // Log the reset action
             Log.d("SettingsScreen", "Player Type: ${viewModel.playerTypeChar}") // Log the reset action
         }) {
-            Text("Reset Game")
+            Text("Update")
         }
     }
 }
