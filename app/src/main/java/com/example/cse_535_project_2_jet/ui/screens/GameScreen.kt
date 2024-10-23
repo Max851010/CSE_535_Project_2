@@ -41,10 +41,20 @@ fun GameScreen(
     ) {
         Text(
             text = "Current Player: ${
-                if (currentPlayer == "X") {
-                    "Player 1"  // You are always Player 1
+                if (databaseViewModel.setting?.type == '1') {
+                    // Playing against AI
+                    if (currentPlayer == "X") {
+                        "Player"  // Human
+                    } else {
+                        "AI"  // AI's turn
+                    }
                 } else {
-                    if (databaseViewModel.setting?.type == '1') "AI" else "Player 2"  // AI or Player 2
+                    // Player vs Player mode
+                    if (currentPlayer == "X") {
+                        "Player 1"
+                    } else {
+                        "Player 2"
+                    }
                 }
             }"
         )
