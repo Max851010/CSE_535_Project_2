@@ -28,8 +28,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun PastGameScreen(
     navController: NavHostController,
-    databaseViewModel: DataBaseViewModel = viewModel()// Default ViewModel provider
-    ) {
+    databaseViewModel: DataBaseViewModel = viewModel() // Default ViewModel provider
+) {
 
     LaunchedEffect(Unit) {
         databaseViewModel.loadHistories()
@@ -38,6 +38,7 @@ fun PastGameScreen(
     var dates by remember { mutableStateOf(listOf<String>()) }
     var difficultyModes by remember { mutableStateOf(listOf<String>()) }
     var winners by remember { mutableStateOf(listOf<String>()) }
+
     LaunchedEffect(histories) {
         Log.d("PastGameScreen", "Histories Size: ${histories.size}")
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -54,19 +55,26 @@ fun PastGameScreen(
         }
     }
 
-    // LazyColumn to create a vertical list
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 48.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
     ) {
-        // Header Row
-        item {
-            HeaderRow()
-        }
+        // Fixed Header Row
+        HeaderRow()
 
-        // Data Rows
-        for (i in dates.indices) {
-            item {
-                DataRow(dates[i], winners[i], difficultyModes[i])
+        // Scrollable Data Rows
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f) // Allow LazyColumn to take the remaining space
+                .padding(bottom = 120.dp)
+        ) {
+            // Data Rows
+            for (i in dates.indices) {
+                item {
+                    DataRow(dates[i], winners[i], difficultyModes[i])
+                }
             }
         }
     }
@@ -77,7 +85,6 @@ fun HeaderRow() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=50.dp)
             .border(1.dp, Color.Black)
             .background(Color(0xFFB0C4DE)),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -123,9 +130,10 @@ fun DataCell(text: String) {
            ,// Keep the same size for consistency
         contentAlignment = Alignment.Center
     ) {
-        Text(text=text)
+        Text(text = text)
     }
 }
+
 @Composable
 fun DateHeaderCell(text: String) {
     Box(
@@ -147,6 +155,6 @@ fun HeaderCell(text: String) {
         ,// Keep the same size for consistency
         contentAlignment = Alignment.Center
     ) {
-        Text(text=text, fontWeight = FontWeight.Bold)
+        Text(text = text, fontWeight = FontWeight.Bold)
     }
 }
