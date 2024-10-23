@@ -9,6 +9,6 @@ interface HistoryDao{
     @Insert
     suspend fun insertRecord(histories: Histories)
 
-    @Query("SELECT * FROM histories;")
+    @Query("SELECT * FROM histories ORDER BY date DESC;")
     fun getHistories(): Flow<List<Histories>>
 }
