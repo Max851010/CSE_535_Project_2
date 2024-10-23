@@ -32,8 +32,8 @@ import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    databaseViewModel: DataBaseViewModel = viewModel()// Default ViewModel provider
-)  {
+    databaseViewModel: DataBaseViewModel = viewModel() // Default ViewModel provider
+) {
     val viewModel: TicTacToeViewModel = viewModel(
         factory = TicTacToeViewModelFactory(databaseViewModel)
     )
@@ -41,21 +41,20 @@ fun SettingsScreen(
         '0' to "Vs Player",
         '1' to "Vs Computer",
     )
+
     LaunchedEffect(Unit) {
         databaseViewModel.loadSettings()
-        val settings_obj = databaseViewModel.setting
-        if (settings_obj != null) {
-            viewModel.updateDifficulty(settings_obj.level)
-            playerTypeMap[settings_obj.type]?.let { viewModel.updatePlayerType(it) }
+        val settingsObj = databaseViewModel.setting
+        if (settingsObj != null) {
+            viewModel.updateDifficulty(settingsObj.level)
+            playerTypeMap[settingsObj.type]?.let { viewModel.updatePlayerType(it) }
         } else {
+            // Set default to "Vs Computer"
             viewModel.updateDifficulty('0')
-            viewModel.updatePlayerType("Vs Player")
-
+            viewModel.updatePlayerType("Vs Computer")
         }
     }
 
-    //val currentDifficulty = viewModel.currentDifficulty
-    //val selectedDifficulty = viewModel.difficulty
     var expandedDifficulty by remember { mutableStateOf(false) }
     var expandedPlayerType by remember { mutableStateOf(false) }
 
@@ -65,56 +64,7 @@ fun SettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(text = "Current Difficulty: ${viewModel.currentDifficulty}")
-        Spacer(modifier = Modifier.height(5.dp))
-
-        Box {
-            TextField(
-                value = viewModel.currentDifficulty,
-                onValueChange = { },
-                readOnly = true,
-                label = { Text("Select Difficulty") },
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.ArrowDropDown,
-                        "Trailing icon for exposed dropdown menu",
-                        Modifier.clickable { expandedDifficulty = !expandedDifficulty } // Toggle expanded state for difficulty
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(0.7f)
-            )
-
-            DropdownMenu(
-                expanded = expandedDifficulty,
-                onDismissRequest = { expandedDifficulty  = false },
-                modifier = Modifier.width((LocalConfiguration.current.screenWidthDp * 0.7f).dp)
-            ) {
-                DropdownMenuItem(
-                    text = { Text("Easy") },
-                    onClick = {
-                        viewModel.updateDifficulty('0')
-                        expandedDifficulty  = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Medium") },
-                    onClick = {
-                        viewModel.updateDifficulty('1')
-                        expandedDifficulty  = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Hard") },
-                    onClick = {
-                        viewModel.updateDifficulty('2')
-                        expandedDifficulty  = false
-                    }
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
+        // Player type selection
         Text(text = "Current Player Type: ${viewModel.playerType}")
         Spacer(modifier = Modifier.height(5.dp))
 
@@ -128,7 +78,7 @@ fun SettingsScreen(
                     Icon(
                         Icons.Filled.ArrowDropDown,
                         "Trailing icon for player type dropdown menu",
-                        Modifier.clickable { expandedPlayerType = !expandedPlayerType } // Toggle expanded state for player type
+                        Modifier.clickable { expandedPlayerType = !expandedPlayerType }
                     )
                 },
                 modifier = Modifier.fillMaxWidth(0.7f)
@@ -158,6 +108,60 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Difficulty level selection (visible only when Vs Computer is selected)
+        if (viewModel.playerType == "Vs Computer") {
+            Text(text = "Current Difficulty: ${viewModel.currentDifficulty}")
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Box {
+                TextField(
+                    value = viewModel.currentDifficulty,
+                    onValueChange = { },
+                    readOnly = true,
+                    label = { Text("Select Difficulty") },
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.ArrowDropDown,
+                            "Trailing icon for exposed dropdown menu",
+                            Modifier.clickable { expandedDifficulty = !expandedDifficulty }
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(0.7f)
+                )
+
+                DropdownMenu(
+                    expanded = expandedDifficulty,
+                    onDismissRequest = { expandedDifficulty = false },
+                    modifier = Modifier.width((LocalConfiguration.current.screenWidthDp * 0.7f).dp)
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Easy") },
+                        onClick = {
+                            viewModel.updateDifficulty('0')
+                            expandedDifficulty = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Medium") },
+                        onClick = {
+                            viewModel.updateDifficulty('1')
+                            expandedDifficulty = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Hard") },
+                        onClick = {
+                            viewModel.updateDifficulty('2')
+                            expandedDifficulty = false
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Update Button
         Button(onClick = {
             databaseViewModel.insertOrUpdateSetting(level = viewModel.difficultyChar, type = viewModel.playerTypeChar)
             databaseViewModel.loadSettings()
