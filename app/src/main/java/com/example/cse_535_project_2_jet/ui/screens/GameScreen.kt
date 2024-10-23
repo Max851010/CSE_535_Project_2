@@ -37,6 +37,7 @@ fun GameScreen(
     val board = viewModel.board
     val currentPlayer = viewModel.currentPlayer
     val winner = viewModel.winner
+    val isGameOver = winner != null
     if (isLoading || databaseViewModel.setting == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -90,7 +91,7 @@ fun GameScreen(
                         val index = i * 3 + j
 
                         // Disable buttons if it's AI's turn
-                        val isButtonEnabled = !isVsAI || currentPlayer == "X"
+                        val isButtonEnabled = !isGameOver && (!isVsAI || currentPlayer == "X")
 
                         OutlinedButton(
                             onClick = {
