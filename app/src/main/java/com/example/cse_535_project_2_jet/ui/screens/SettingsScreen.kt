@@ -153,7 +153,8 @@ fun SettingsScreen(
         Button(onClick = {
             databaseViewModel.insertOrUpdateSetting(level = viewModel.difficultyChar, type = viewModel.playerTypeChar)
             databaseViewModel.loadSettings()
-            //Log.d("SettingsScreen", "Difficulty Level: ${viewModel.playerTypeChar}") // Log the reset action
+            Log.d("SettingsScreen", "Difficulty Level: ${viewModel.difficultyChar}") // Log the reset action
+            Log.d("SettingsScreen", "Player Type: ${viewModel.playerTypeChar}") // Log the reset action
         }) {
             Text("Reset Game")
         }
