@@ -32,12 +32,19 @@ class DataBaseViewModel(application: Application) : AndroidViewModel(application
     fun loadSettings() {
         viewModelScope.launch {
             setting = gameDatabase.settingsDao().getSettingById(1)
+            Log.d("DataBaseViewModel", "Loading settings")
+            if (setting == null) {
+                Log.d("DataBaseViewModel", "Initialize the first setting record")
+                insertOrUpdateSetting('0', '0')
+            }
         }
     }
 
     fun insertHistory(history: Histories) {
         viewModelScope.launch {
+            Log.d("DataBaseViewModel", history.toString())
             gameDatabase.historyDao().insertRecord(history)
+            Log.d("DataBaseViewModel", "History inserted")
         }
     }
 

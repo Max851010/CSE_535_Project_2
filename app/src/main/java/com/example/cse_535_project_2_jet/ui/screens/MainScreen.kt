@@ -25,9 +25,6 @@ import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
 fun MainScreen() {
     val navController = rememberNavController()
     val selectedIndex = remember { mutableStateOf(0) }
-    val context = LocalContext.current
-    val databaseViewModel: DataBaseViewModel = viewModel()
-    databaseViewModel.loadSettings()
 
 
     Scaffold(

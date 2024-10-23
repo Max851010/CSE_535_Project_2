@@ -42,6 +42,7 @@ fun SettingsScreen(
         '1' to "Vs Computer",
     )
     LaunchedEffect(Unit) {
+        databaseViewModel.loadSettings()
         val settings_obj = databaseViewModel.setting
         if (settings_obj != null) {
             viewModel.updateDifficulty(settings_obj.level)
