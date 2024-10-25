@@ -10,17 +10,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.cse_535_project_2_jet.navigation.AppNavHost
-import com.google.androidgamesdk.gametextinput.Settings
+import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val selectedIndex = remember { mutableStateOf(0) }
+    val selectedIndex = remember { mutableStateOf(1) }
+    val context = LocalContext.current
+    val databaseViewModel: DataBaseViewModel = viewModel()
+    databaseViewModel.loadSettings()
+
 
     Scaffold(
         bottomBar = {

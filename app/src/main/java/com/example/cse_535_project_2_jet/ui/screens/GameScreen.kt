@@ -1,21 +1,134 @@
 package com.example.cse_535_project_2_jet.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.navigation.NavHostController
+import com.example.cse_535_project_2_jet.database.GameDatabase
+
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cse_535_project_2_jet.ui.components.TicTacToeViewModelFactory
+import com.example.cse_535_project_2_jet.ui.viewModel.TicTacToeViewModel
+import com.example.cse_535_project_2_jet.viewModels.DataBaseViewModel
+
 
 @Composable
-fun GameScreen(navController: NavHostController) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Game Screen")
+fun GameScreen(
+    navController: NavHostController,
+    databaseViewModel: DataBaseViewModel = viewModel() // Default ViewModel provider
+)  {
+    val isLoading by databaseViewModel.isLoading.collectAsState()
+    LaunchedEffect(Unit) {
+        databaseViewModel.loadSettings()
+    }
+
+    val viewModel: TicTacToeViewModel = viewModel(
+        factory = TicTacToeViewModelFactory(databaseViewModel)
+    )
+    val board = viewModel.board
+    val currentPlayer = viewModel.currentPlayer
+    val winner = viewModel.winner
+    val isGameOver = winner != null
+    if (isLoading || databaseViewModel.setting == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        val viewModel: TicTacToeViewModel = viewModel(
+            factory = TicTacToeViewModelFactory(databaseViewModel)
+        )
+        val board = viewModel.board
+        val currentPlayer = viewModel.currentPlayer
+        val winner = viewModel.winner
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Log.d("first time", "${databaseViewModel.setting?.type}")
+
+            // Determine the game type (Vs Player or Vs AI)
+            val isVsAI = databaseViewModel.setting?.type == '1'
+
+            Text(
+                text = "Current Player: ${
+                    if (isVsAI) {
+                        if (currentPlayer == "X") {
+                            "Player"  // Human's turn
+                        } else {
+                            "AI"  // AI's turn
+                        }
+                    } else {
+                        // Player vs Player mode
+                        if (currentPlayer == "X") {
+                            "Player 1"
+                        } else {
+                            "Player 2"
+                        }
+                    }
+                }"
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 3x3 Grid for the Tic-Tac-Toe board
+            for (i in 0..2) {
+                Row {
+                    for (j in 0..2) {
+                        val index = i * 3 + j
+
+                        // Disable buttons if it's AI's turn
+                        val isButtonEnabled = !isGameOver && (!isVsAI || currentPlayer == "X")
+
+                        OutlinedButton(
+                            onClick = {
+                                if (isButtonEnabled) {
+                                    viewModel.makeMove(index)
+                                }
+                            },
+                            enabled = isButtonEnabled,
+                            shape = RectangleShape,
+                            modifier = Modifier.size(100.dp)
+                        ) {
+                            Text(text = board[index], style = MaterialTheme.typography.headlineLarge)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Show winner message if there is one
+            if (winner != null) {
+                if (winner == "Draw") {
+                    Text(text = "Draw Game", style = MaterialTheme.typography.titleMedium)
+                } else {
+                    val winnerText = if (isVsAI && winner == "Player 1") {
+                        "Winner: AI"
+                    } else {
+                        "Winner: $winner"
+                    }
+                    Text(text = winnerText, style = MaterialTheme.typography.titleMedium)
+                }
+            }
+
+            // Always show reset button
+            Button(onClick = { viewModel.resetGame() }) {
+                Text("Reset")
+            }
+        }
     }
 }
