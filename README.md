@@ -63,12 +63,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#file-structure">File Structure</a></li>
   </ol>
 </details>
 
@@ -133,7 +128,7 @@ This section gives an instruction of how to run the project on local machine wit
 
 3. Sync Project with Gradle Files
 
-4. Run app
+4. Run the app
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -142,86 +137,67 @@ This section gives an instruction of how to run the project on local machine wit
 
 ## File Structure
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+This project follows the Model-View-Controller (MVC) architecture using the Jetpack Compose framework for a modular, maintainable, and responsive UI design.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+- Model: All data-related operations are managed within the `database/` and `viewModels/` folders, where Room entities (`Entities.kt`) and DAOs (`HistoryDao.kt, SettingsDao.kt) represent the data layer, while DataBaseViewModel.kt and TicTacToeViewModel.kt handle data interactions and business logic.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- View: The UI components, layouts, and themes are organized in the ui/ folder. Screens like GameScreen.kt, PastGameScreen.kt, and SettingsScreen.kt present data to the user, with styling managed in the theme/ subfolder.
 
+- Controller: Navigation and user flow are controlled by NavGraph.kt, which defines the routes between screens and manages transitions within the app.
 
+The project files are organized within `/app/src/main/java/com/example/cse_535_project_2_jet` as follows:
 
-<!-- ROADMAP -->
-## Roadmap
+```shell
+.
+├── MainActivity.kt
+├── components
+│   └── DateConverters.kt
+├── database
+│   ├── Entities.kt          # Defines the Settings and Histories database entities
+│   ├── GameDatabase.kt      # Configures Room Database and provides instance
+│   ├── HistoryDao.kt        # Data Access Object (DAO) for history table operations
+│   ├── MyAutoMigrationSpec.kt # Manages database migrations
+│   └── SettingsDao.kt       # DAO for settings table operations
+├── navigation
+│   └── NavGraph.kt          # Handles app navigation with Jetpack Navigation Component
+├── ui
+│   ├── components
+│   │   └── TicTacToeViewFactory.kt  # Factory for rendering Tic-Tac-Toe board
+│   ├── screens
+│   │   ├── GameScreen.kt     # Main game screen
+│   │   ├── MainScreen.kt     # Home screen, entry point
+│   │   ├── PastGameScreen.kt # Displays a list of past games
+│   │   └── SettingsScreen.kt # User settings and configurations screen
+│   └── theme
+│       ├── Color.kt          # App color scheme
+│       ├── Theme.kt          # Theme configurations
+│       └── Type.kt           # Text styles and font configurations
+└── viewModels
+    ├── DataBaseViewModel.kt  # ViewModel for database interactions
+    └── TicTacToeViewModel.kt # ViewModel containing all game logic for Tic-Tac-Toe
+```
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+### Screens
+This project is built using the Jetpack Compose framework. The main entry point is MainActivity.kt, which loads MainScreen.kt as the home screen. From there, the app is structured into three primary screens:
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+- `GameScreen.kt`: The main gameplay interface for Tic-Tac-Toe.
+- `PastGameScreen.kt`: Displays a history of past games with details.
+- `SettingsScreen.kt`: Provides configuration options for users.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Navigation between these screens is managed by `NavGraph.kt`, ensuring smooth transitions.
 
+### RoomDB
+The Room database setup is located in the `database/` folder, with all CRUD operations facilitated through DAOs and managed via `DataBaseViewModel.kt`. The database includes two primary tables, defined in `Entities.kt`:
 
+- `settings`: Stores user configuration settings.
+- `histories`: Logs past games with relevant game details.
 
-<!-- CONTRIBUTING -->
-## Contributing
+Data access is handled by `SettingsDao.kt` and `HistoryDao.kt`, which provide methods for interacting with the database in a structured, efficient manner.
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+### Game Logic
+All the game logic for Tic-Tac-Toe is implemented in `TicTacToeViewModel.kt`. This includes game state management, turn-based logic, win-checking algorithms, and any updates required during gameplay.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
