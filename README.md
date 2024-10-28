@@ -139,9 +139,9 @@ This section gives an instruction of how to run the project on local machine wit
 
 This project follows the Model-View-Controller (MVC) architecture using the Jetpack Compose framework for a modular, maintainable, and responsive UI design.
 
-- Model: All data-related operations are managed within the `database/` and `viewModels/` folders, where Room entities (`Entities.kt`) and DAOs (`HistoryDao.kt, SettingsDao.kt) represent the data layer, while DataBaseViewModel.kt and TicTacToeViewModel.kt handle data interactions and business logic.
+- Model: All data-related operations are managed within the `database/` and `viewModels/` folders, where Room entities (`Entities.kt`) and DAOs (`HistoryDao.kt`, `SettingsDao.kt`) represent the data layer, while DataBaseViewModel.kt and TicTacToeViewModel.kt handle data interactions and business logic.
 
-- View: The UI components, layouts, and themes are organized in the ui/ folder. Screens like GameScreen.kt, PastGameScreen.kt, and SettingsScreen.kt present data to the user, with styling managed in the theme/ subfolder.
+- View: The UI components, layouts, and themes are organized in the `ui/` folder. Screens like `GameScreen.kt`, `PastGameScreen.kt`, and `SettingsScreen.kt` present data to the user, with styling managed in the `theme/` subfolder.
 
 - Controller: Navigation and user flow are controlled by NavGraph.kt, which defines the routes between screens and manages transitions within the app.
 
