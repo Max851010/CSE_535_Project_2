@@ -40,7 +40,7 @@
     CSE_535_Project_2
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo Video</a>
+    <a href="https://youtu.be/EC9uGuIxjCg">View Demo Video</a>
   </p>
 </div>
 
